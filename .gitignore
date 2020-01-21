@@ -1,0 +1,11 @@
+# Project level gitignore
+
+# dirs
+.idea/
+.gradle/
+build/
+gradle/
+
+# files
+gradlew
+gradlew.bat
