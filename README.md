@@ -10,17 +10,7 @@ At the moment JWS only supports retrieving html documents in the default `resour
 Building the project with gradle and then running will start the server at 127.0.0.1:8080.
 Visiting http://127.0.0.1:8080/ in a browser you should see the following:
 
-``
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Index</title>
-</head>
-<body>
-    <p>Welcome!</p>
-</body>
-</html>
-``
+``Welcome!``
 
 ## Road-map
   * [ ] Add logging
