@@ -1,3 +1,5 @@
+package JWS;
+
 import java.io.IOException;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;

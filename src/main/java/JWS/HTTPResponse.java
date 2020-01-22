@@ -1,3 +1,5 @@
+package JWS;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -73,7 +75,7 @@ public class HTTPResponse {
 
     @Override
     public String toString() {
-        return "HTTPResponse{\n" +
+        return "JWS.HTTPResponse{\n" +
                 "header:\n" + header +
                 "body:\n" + body +
                 '}';

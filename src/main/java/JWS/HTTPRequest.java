@@ -1,3 +1,10 @@
+package JWS;
+
+/* HTTPRequest
+*    A container class for a given HTTP request.
+    Note: does validation on request method.
+*/
+
 public class HTTPRequest {
 
     private String requestMethod;
@@ -16,11 +23,32 @@ public class HTTPRequest {
         return requestPath;
     }
 
+    public enum requestMethods {
+        GET,
+        POST
+        ;
+
+        public static boolean contains(String value) {
+            for (requestMethods method : requestMethods.values()) {
+                if (method.name().equals(value)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     public static HTTPRequest create(String request) {
+        // TODO: More rigorous validation on the request.
         String requestLine = request.split("\n")[0];
         String[] requestLineSplit = requestLine.split(" ");
         String requestMethod = requestLineSplit[0];
         String requestPath = requestLineSplit[1];
+
+        if (!requestMethods.contains(requestMethod)) {
+            return new HTTPRequest(null, requestPath);
+        }
+
         return new HTTPRequest(requestMethod, requestPath);
     }
 

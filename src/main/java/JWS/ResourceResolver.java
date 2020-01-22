@@ -1,3 +1,5 @@
+package JWS;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -24,18 +26,9 @@ public class ResourceResolver {
         return resourceAsString(relativePath);
     }
 
-    public String error() {
+    private String getOrLog(String file) {
         try {
-            return get(getRelativePath(defaultResources.PAGE_500.name));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public String notFound() {
-        try {
-            return get(getRelativePath(defaultResources.PAGE_404.name));
+            return get(getRelativePath(file));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,13 +40,15 @@ public class ResourceResolver {
             resource = defaultResources.PAGE_INDEX.name;
         }
         // TODO: resolve the relative path for other file types. i.e. JS, CSS, etc..
+        // TODO: implement security wrt path traversal
         if (resource.startsWith("/")) {
             resource = "html" + resource;
         }
         else {
             resource = "html/" + resource;
         }
-        return Server.class.getResource(resource);
+        resource = "/" + resource;
+        return JWS.ResourceResolver.class.getResource(resource);
     }
 
     private String resourceAsString(URL resourcePath) throws IOException {
@@ -64,5 +59,13 @@ public class ResourceResolver {
         StringBuilder response = new StringBuilder();
         Files.lines(path).forEach(response::append);
         return response.toString();
+    }
+
+    public String error() {
+        return getOrLog(defaultResources.PAGE_500.name);
+    }
+
+    public String notFound() {
+        return getOrLog(defaultResources.PAGE_404.name);
     }
 }

@@ -1,3 +1,5 @@
+package JWS;
+
 enum ResponseCode {
     // Successful codes
     OK("200 OK"),
