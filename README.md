@@ -13,6 +13,7 @@ Visiting http://127.0.0.1:8080/ in a browser you should see the following:
 ``Welcome!``
 
 ## Road-map
+  * [ ] Add unit tests
   * [ ] Add logging
   * [ ] Add support for file types other than html:
     * [ ] JavaScript
