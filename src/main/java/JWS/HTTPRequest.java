@@ -40,6 +40,10 @@ public class HTTPRequest {
 
     public static HTTPRequest create(String request) {
         // TODO: More rigorous validation on the request.
+        if (request.isBlank()) {
+            return new HTTPRequest(null, null);
+        }
+
         String requestLine = request.split("\n")[0];
         String[] requestLineSplit = requestLine.split(" ");
         String requestMethod = requestLineSplit[0];

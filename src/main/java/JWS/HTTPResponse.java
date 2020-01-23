@@ -40,17 +40,14 @@ public class HTTPResponse {
 
     private String createBody(HTTPRequest request) {
         ResourceResolver resolver = new ResourceResolver();
-        String resource = request.getRequestPath();
 
         if (request.getRequestMethod() == null || request.getRequestPath() == null) {
             status = ResponseCode.BAD_REQUEST.code;
             return resolver.error(ResponseCode.BAD_REQUEST);
         }
 
-        URL resourcePath = null;
-        if (resource != null) {
-            resourcePath = resolver.getRelativePath(resource);
-        }
+        String resource = request.getRequestPath();
+        URL resourcePath = resolver.getRelativePath(resource);
 
         String responseBody;
         try {
