@@ -23,12 +23,12 @@ public class HTTPRequest {
         return requestPath;
     }
 
-    public enum requestMethods {
+    private enum requestMethods {
         GET,
         POST
         ;
 
-        public static boolean contains(String value) {
+        static boolean contains(String value) {
             for (requestMethods method : requestMethods.values()) {
                 if (method.name().equals(value)) {
                     return true;

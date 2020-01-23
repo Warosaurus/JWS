@@ -11,6 +11,7 @@ public class ResourceResolver {
 
     public enum defaultResources {
         PAGE_INDEX("index.html"),
+        PAGE_400("400.html"),
         PAGE_404("404.html"),
         PAGE_500("500.html")
         ;
@@ -61,11 +62,11 @@ public class ResourceResolver {
         return response.toString();
     }
 
-    public String error() {
-        return getOrLog(defaultResources.PAGE_500.name);
-    }
-
-    public String notFound() {
-        return getOrLog(defaultResources.PAGE_404.name);
+    public String error(ResponseCode code) {
+        switch (code) {
+            case BAD_REQUEST: return getOrLog(defaultResources.PAGE_400.name);
+            case NOT_FOUND: return getOrLog(defaultResources.PAGE_404.name);
+            default: return getOrLog(defaultResources.PAGE_500.name);
+        }
     }
 }

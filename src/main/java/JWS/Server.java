@@ -63,8 +63,8 @@ public class Server {
         HTTPResponse response = HTTPResponse.from(request);
         System.out.println(response);
         try {
-            clientChannel.write(response.getHeader());
-            clientChannel.write(response.getBody());
+            clientChannel.write(response.getHeaderAsByteBuffer());
+            clientChannel.write(response.getBodyAsByteBuffer());
         } catch (IOException e) {
             e.printStackTrace();
         }

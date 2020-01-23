@@ -3,7 +3,9 @@ package JWS;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,10 +22,9 @@ public class HTTPResponse {
         headerMap.put("Content-Type", "text/html; charset=utf-8");
         headerMap.put("Server", "JWS");
         headerMap.put("Accept-Ranges", "bytes");
-        headerMap.put("Date", ZonedDateTime.now().toString());
+        headerMap.put("Date", requestTimeStamp());
 
-        body = createBody(request.getRequestPath());
-
+        body = createBody(request);
         headerMap.put("Content-Length", String.valueOf(body.getBytes().length));
         header = createHeader();
     }
@@ -32,9 +33,24 @@ public class HTTPResponse {
         return new HTTPResponse(request);
     }
 
-    private String createBody(String resource) {
+    private String requestTimeStamp() {
+        return ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"))
+                                  .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+    }
+
+    private String createBody(HTTPRequest request) {
         ResourceResolver resolver = new ResourceResolver();
-        URL resourcePath = resolver.getRelativePath(resource);
+        String resource = request.getRequestPath();
+
+        if (request.getRequestMethod() == null || request.getRequestPath() == null) {
+            status = ResponseCode.BAD_REQUEST.code;
+            return resolver.error(ResponseCode.BAD_REQUEST);
+        }
+
+        URL resourcePath = null;
+        if (resource != null) {
+            resourcePath = resolver.getRelativePath(resource);
+        }
 
         String responseBody;
         try {
@@ -43,11 +59,11 @@ public class HTTPResponse {
                 responseBody = resolver.get(resourcePath);
             } else {
                 status = ResponseCode.NOT_FOUND.code;
-                responseBody = resolver.notFound();
+                responseBody = resolver.error(ResponseCode.NOT_FOUND);
             }
         } catch (IOException e) {
             status = ResponseCode.SERVER_ERROR.code;
-            responseBody = resolver.error();
+            responseBody = resolver.error(ResponseCode.SERVER_ERROR);
         }
         return responseBody;
     }
@@ -65,12 +81,20 @@ public class HTTPResponse {
         return headerBuilder.toString();
     }
 
-    public ByteBuffer getHeader() {
+    public ByteBuffer getHeaderAsByteBuffer() {
         return ByteBuffer.wrap(header.getBytes());
     }
 
-    public ByteBuffer getBody() {
+    public ByteBuffer getBodyAsByteBuffer() {
         return ByteBuffer.wrap(body.getBytes());
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public String getBody() {
+        return body;
     }
 
     @Override

@@ -5,6 +5,7 @@ enum ResponseCode {
     OK("200 OK"),
 
     // Client Error
+    BAD_REQUEST("400 Bad Request"),
     NOT_FOUND("404 Not Found"),
 
     // Server error
