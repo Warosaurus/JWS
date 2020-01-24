@@ -1,5 +1,8 @@
 package JWS;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
@@ -14,8 +17,11 @@ import java.util.Set;
 public class Server {
 
     private boolean running = true;
+    private static final Logger log = LogManager.getLogger(Server.class);
 
-    private void serve() throws IOException {
+    void serve() throws IOException {
+        log.info("Server starting..");
+
         int clientMessageReadLength = 32 * 1024;
         Charset charset = StandardCharsets.ISO_8859_1;
 
@@ -57,11 +63,11 @@ public class Server {
     }
 
     private void handleRequest(String requestString, SocketChannel clientChannel) {
-        System.out.println(requestString);
+        log.debug("Request string:\n{}", requestString);
 
         HTTPRequest request = HTTPRequest.create(requestString);
         HTTPResponse response = HTTPResponse.from(request);
-        System.out.println(response);
+        log.debug("Response:\n{}", response);
         try {
             clientChannel.write(response.getHeaderAsByteBuffer());
             clientChannel.write(response.getBodyAsByteBuffer());
